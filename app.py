@@ -65,7 +65,7 @@ limiter = Limiter(key_func=get_remote_address)
 limiter.init_app(app)
 
 # Setup database connection
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///taskwhiz.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///taskReminder.db'
 db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
