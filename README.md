@@ -71,18 +71,6 @@ We're constantly evolving! Here's a sneak peek at what's coming:
 - 🧘 Pomodoro timer and study session planner
 
 
-##Installation 
-
-
-
-## 📸 Screenshots
-
-![Dashboard](https://github.com/user-attachments/assets/e2b2a725-978f-4391-9013-dbe95b9ce92f)
-*Your personalized taskReminder dashboard*
-
-
-![Assignment View](https://github.com/user-attachments/assets/aa008c1f-ed2a-4b95-be88-d050757db943)
-*Detailed assignment view with submission options*
 
 
 ## 🙌 Acknowledgements
