@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<style>
+    :root {
+        --primary-color: #4a90e2;
+        --primary-light: #6aa7e8;
+        --primary-dark: #3a7cbd;
+        --secondary-color: #f5a623;
+        --secondary-light: #f7b84d;
+        --secondary-dark: #e09612;
+        --background-color: #f0f4f8;
+        --text-color: #333;
+        --text-light: #6c757d;
+        --card-background: #ffffff;
+        --shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark-theme {
+        --background-color: #1a1a1a;
+        --text-color: #f0f0f0;
+        --text-light: #b0b0b0;
+        --card-background: #2a2a2a;
+        --shadow: 0 10px 20px rgba(255, 255, 255, 0.1);
+    }
+
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .dashboard-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 3rem;
+    }
+
+    .summary-card {
+        background: var(--card-background);
+        color: var(--text-color);
+        border-radius: 15px;
+        padding: 1.5rem;
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: var(--shadow);
+    }
+
+    .summary-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .assignments-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 2rem;
+    }
+
+    .assignment-card {
+        background-color: var(--card-background);
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .assignment-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .btn {
+        background-color: var(--secondary-color);
+        color: #fff;
+        transition: background-color 0.3s;
+    }
+
+    .btn:hover {
+        background-color: var(--secondary-dark);
+    }
+</style>
+
+<div class="dashboard-container">
+    <h1 class="page-title fade-in"><i class="fas fa-tachometer-alt"></i> Your Dashboard</h1>
+    <div class="dashboard-summary">
+        <div class="summary-card">
+            <i class="fas fa-book-open"></i>
+            <h3>Total Assignments</h3>
+            <p>{{ total_assignments }}</p>
+        </div>
+        <div class="summary-card">
+            <i class="fas fa-check-circle"></i>
+            <h3>Completed Assignments</h3>
+            <p>{{ completed_assignments }} / {{ total_assignments }}</p>
+        </div>
+        <div class="summary-card">
+            <i class="fas fa-hourglass-half"></i>
+            <h3>Upcoming Deadlines</h3>
+            <p>{{ upcoming_deadlines }}</p>
+        </div>
+    </div>
+    <h2 class="section-title"><i class="fas fa-tasks"></i> Recent Assignments</h2>
+    <div class="assignments-grid">
+        {% for assignment in assignments[:9] %}
+        <div class="assignment-card" data-id="{{ assignment.id }}">
+            <div class="assignment-header">
+                <h3 class="assignment-title"><i class="fas fa-file-alt"></i> {{ assignment.title }}</h3>
+                <span class="assignment-status status-{{ assignment.status.lower().replace(' ', '-') }}">
+                    {{ assignment.status }}
+                </span>
+            </div>
+            <p class="assignment-course"><i class="fas fa-chalkboard-teacher"></i> {{ assignment.course }}</p>
+            <p class="assignment-due-date"><i class="far fa-clock"></i> Due: {{ assignment.due_date }}</p>
+            {% if assignment.grade is defined and assignment.grade is not none %}
+            <p class="assignment-grade">
+                <i class="fas fa-star"></i> Grade: {{ assignment.grade }} / {{ assignment.total_marks }}
+            </p>
+            {% endif %}
+            <div class="assignment-actions">
+                {% if assignment.status.lower() == 'not submitted' %}
+                <div class="file-upload">
+                    <label for="file-{{ assignment.id }}" class="btn btn-secondary">
+                        <i class="fas fa-upload"></i> Choose File
+                    </label>
+                    <input type="file" id="file-{{ assignment.id }}" class="file-input" data-assignment-id="{{ assignment.id }}" style="display: none;">
+                </div>
+                <button class="btn btn-primary submit-btn" data-assignment-id="{{ assignment.id }}">
+                    <i class="fas fa-paper-plane"></i> Submit
+                </button>
+                {% else %}
+                <button class="btn btn-secondary open-assignment">
+                    <i class="fas fa-folder-open"></i> Open
+                </button>
+                {% endif %}
+                <button class="btn btn-secondary toggle-details" aria-label="Toggle assignment details">
+                    <i class="fas fa-chevron-down"></i> Details
+                  </button>
+            </div>
+            <div class="assignment-details" style="display: none;">
+                <p><strong>Description:</strong> {{ assignment.description | default('No description available', true) }}</p>
+                <p><strong>Created:</strong> {{ assignment.created_date | default('N/A', true) }}</p>
+                <p><strong>Last Modified:</strong> {{ assignment.last_modified | default('N/A', true) }}</p>
+                <p><strong>Grade:</strong> {{ assignment.grade | default('Not graded', true) }} / {{ assignment.total_marks | default('N/A', true) }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <a href="{{ url_for('assignments') }}" class="btn btn-primary"><i class="fas fa-list"></i> View All Assignments</a>
+</div>
+<div id="loading" class="loading-spinner" style="display: none;">
+    <i class="fas fa-spinner fa-spin"></i> Loading...
+</div>
+<div id="notification-container"></div>
+{% endblock %}
+
+{% block scripts %}
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Toggle assignment details
+    document.querySelectorAll('.toggle-details').forEach(button => {
+        button.addEventListener('click', function() {
+            const details = this.closest('.assignment-card').querySelector('.assignment-details');
+            details.style.display = details.style.display === 'none' ? 'block' : 'none';
+            this.querySelector('i').classList.toggle('fa-chevron-down');
+            this.querySelector('i').classList.toggle('fa-chevron-up');
+        });
+    });
+
+    // File upload and submit functionality
+    document.querySelectorAll('.file-input').forEach(input => {
+        input.addEventListener('change', function() {
+            const label = this.previousElementSibling;
+            label.textContent = this.files[0] ? this.files[0].name : 'Choose File';
+        });
+    });
+
+    document.querySelectorAll('.submit-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const assignmentId = this.dataset.assignmentId;
+            const fileInput = document.getElementById(`file-${assignmentId}`);
+            if (fileInput.files.length === 0) {
+                alert('Please choose a file to submit.');
+                return;
+            }
+            // Implement your file submission logic here
+            console.log(`Submitting file for assignment ${assignmentId}`);
+        });
+    });
+});
+
+// Dark mode toggle
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-theme');
+    localStorage.setItem('darkMode', document.body.classList.contains('dark-theme'));
+}
+
+// Check for saved dark mode preference
+if (localStorage.getItem('darkMode') === 'true') {
+    document.body.classList.add('dark-theme');
+}
+</script>
+{% endblock %}

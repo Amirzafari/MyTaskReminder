@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<div class="hero fade-in">
+    <h1>Welcome to TaskWhiz</h1>
+    <p>Manage your college assignments with ease!</p>
+    {% if not current_user.is_authenticated %}
+        {% if 'credentials' in session %}
+            <a href="{{ url_for('dashboard') }}" class="btn btn-primary"><i class="fas fa-arrow-right"></i> Go to Dashboard</a>
+        {% else %}
+            <a href="{{ url_for('authorize') }}" class="btn btn-primary"><i class="fab fa-google"></i> Login with Google</a>
+        {% endif %}
+    {% endif %}
+</div>
+<div class="features">
+    <div class="feature fade-in">
+        <div class="feature-icon">
+            <i class="fab fa-github"></i>
+        </div>
+        <h2>GitHub Integration</h2>
+        <p>Seamlessly sync your assignments with GitHub repositories.</p>
+    </div>
+    <div class="feature fade-in">
+        <div class="feature-icon">
+            <i class="fab fa-google"></i>
+        </div>
+        <h2>Google Classroom</h2>
+        <p>Connect with Google Classroom to import your assignments and due dates.</p>
+    </div>
+    <div class="feature fade-in">
+        <div class="feature-icon">
+            <i class="fas fa-bell"></i>
+        </div>
+        <h2>Smart Notifications</h2>
+        <p>Receive timely reminders for upcoming assignments and deadlines.</p>
+    </div>
+    <div class="feature fade-in">
+        <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+        </div>
+        <h2>Analytics</h2>
+        <p>Track your progress and get insights into your academic performance.</p>
+    </div>
+</div>
+
+<div class="testimonials">
+    <h2>What Our Users Say</h2>
+    <div class="testimonial-grid">
+        <div class="testimonial-card fade-in">
+            <img src="{{ url_for('static', filename='images/anik.jpg') }}" alt="Anik Shaikh" class="testimonial-avatar">
+            <p>"TaskWhiz has revolutionized how I manage my assignments. It's a game-changer!"</p>
+            <h3>Anik Shaikh</h3>
+            <span>Computer Science Student</span>
+        </div>
+        <div class="testimonial-card fade-in">
+            <img src="{{ url_for('static', filename='images/harsh.jpg') }}" alt="Harsh Vekariya" class="testimonial-avatar">
+            <p>"The GitHub integration is fantastic. It makes coding assignments so much easier to handle."</p>
+            <h3>Harsh Vekariya</h3>
+            <span>Software Engineering Major</span>
+        </div>
+        <div class="testimonial-card fade-in">
+            <img src="{{ url_for('static', filename='images/swayam.jpg') }}" alt="Swayam Jain" class="testimonial-avatar">
+            <p>"I love the analytics feature. It helps me stay on top of my academic performance."</p>
+            <h3>Swayam Jain</h3>
+            <span>Business Administration Student</span>
+        </div>
+        <div class="testimonial-card fade-in">
+            <img src="{{ url_for('static', filename='images/jaimin.jpg') }}" alt="Jaimin Gondaliya" class="testimonial-avatar">
+            <p>"Smart notifications keep me on track with my assignments. Never missed a deadline since using TaskWhiz!"</p>
+            <h3>Jaimin Gondaliya</h3>
+            <span>Data Science Student</span>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/index.js') }}"></script>
+{% endblock %}
