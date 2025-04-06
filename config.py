@@ -2,7 +2,7 @@ import os
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'your-secret-key'
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///taskwhiz.db'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///taskReminder.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
     GITHUB_REPO = os.environ.get('GITHUB_REPO', 'Anik2812/assignments')
