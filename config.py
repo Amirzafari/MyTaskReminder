@@ -5,7 +5,7 @@ class Config:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///taskReminder.db'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     GITHUB_TOKEN = os.environ.get('GITHUB_TOKEN')
-    GITHUB_REPO = os.environ.get('GITHUB_REPO', 'Amirzafari/assignments')
+    GITHUB_REPO = os.environ.get('GITHUB_REPO', 'Amirzafari/MyTaskReminder')
     GOOGLE_CLIENT_ID = os.environ.get('GOOGLE_CLIENT_ID')
     GOOGLE_CLIENT_SECRET = os.environ.get('GOOGLE_CLIENT_SECRET')
     GOOGLE_REDIRECT_URI = os.environ.get('GOOGLE_REDIRECT_URI')
