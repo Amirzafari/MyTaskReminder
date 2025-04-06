@@ -1,4 +1,4 @@
-# 🚀 TaskWhiz: Your Ultimate College Assignment Management Companion
+# 🚀 taskReminder: Your Ultimate College Assignment Management Companion
 
 <div align="center">
   
